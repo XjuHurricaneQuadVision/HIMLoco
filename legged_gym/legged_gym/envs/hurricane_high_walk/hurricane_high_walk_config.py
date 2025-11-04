@@ -35,7 +35,7 @@ class HurricaneHighWalkRoughCfg( LeggedRobotCfg ):
         num_envs = 4096
 
     class terrain( LeggedRobotCfg.terrain ):
-        mesh_type = 'trimesh' # "heightfield" # none, plane, heightfield or trimesh
+        mesh_type = 'plane' # "heightfield" # none, plane, heightfield or trimesh
 
     class commands( LeggedRobotCfg.commands ):
             curriculum = True
@@ -44,8 +44,8 @@ class HurricaneHighWalkRoughCfg( LeggedRobotCfg ):
             resampling_time = 10. # time before command are changed[s]
             heading_command = True # if true: compute ang vel command from heading error
             class ranges( LeggedRobotCfg.commands.ranges):
-                lin_vel_x = [-1.0, 1.0] # min max [m/s]
-                lin_vel_y = [-1.0, 1.0]   # min max [m/s]
+                lin_vel_x = [-3.0, 3.0] # min max [m/s]
+                lin_vel_y = [-2.0, 2.0]   # min max [m/s]
                 ang_vel_yaw = [-3.14, 3.14]    # min max [rad/s]
                 heading = [-3.14, 3.14]
 
@@ -71,7 +71,7 @@ class HurricaneHighWalkRoughCfg( LeggedRobotCfg ):
     class control( LeggedRobotCfg.control ):
         # PD Drive parameters:
         control_type = 'P'
-        stiffness = {'joint': 40.0}  # [N*m/rad]
+        stiffness = {'joint': 60.0}  # [N*m/rad]
         damping = {'joint': 1.0}     # [N*m*s/rad]
         # action scale: target angle = actionScale * action + defaultAngle
         action_scale = 0.25
@@ -92,21 +92,21 @@ class HurricaneHighWalkRoughCfg( LeggedRobotCfg ):
     class rewards( LeggedRobotCfg.rewards ):
         class scales:
             termination = -0.0                                   # 回合被终止的一次性惩罚权重
-            tracking_lin_vel = 1.5                               # 线速度跟踪奖励权重
-            tracking_ang_vel = 0.8                               # 角速度跟踪奖励权重
+            tracking_lin_vel = 2.5                               # 线速度跟踪奖励权重
+            tracking_ang_vel = 1.0                               # 角速度跟踪奖励权重
             lin_vel_z = -2.0                                     # 竖直线速度惩罚权重
             ang_vel_xy = -0.05                                   # 横滚和俯仰角速度惩罚权重
             orientation = -0.2                                   # 姿态偏差惩罚权重
-            dof_acc = -2.5e-7                                    # 关节加速度惩罚权重
-            joint_power = -2e-5                                  # 关节功率惩罚权重
-            base_height = -1.0                                   # 机身高度偏差惩罚权重
-            foot_clearance = -0.01                               # 足端高度惩罚权重
-            action_rate = -0.01                                  # 动作一阶差分惩罚权重
+            dof_acc = -1.5e-7                                    # 关节加速度惩罚权重
+            joint_power = -1e-5                                  # 关节功率惩罚权重
+            base_height = -1.5                                   # 机身高度偏差惩罚权重
+            foot_clearance = -0.05                               # 足端高度惩罚权重
+            action_rate = -0.005                                 # 动作一阶差分惩罚权重
             smoothness = -0.01                                   # 动作二阶差分惩罚权重
-            feet_air_time =  0.0                                 # 足端腾空时长奖励权重
+            feet_air_time =  0.1                                 # 足端腾空时长奖励权重
             collision = -0.0                                     # 非足端接触惩罚权重
             feet_stumble = -0.0                                  # 足端绊倒惩罚权重
-            stand_still = -0.                                    # 静止奖励权重
+            stand_still = -1.                                    # 静止奖励权重
             torques = -0.0                                       # 关节扭矩惩罚权重
             dof_vel = -0.0                                       # 关节速度惩罚权重
             dof_pos_limits = -0.0                                # 接近关节位置限制惩罚权重
@@ -118,7 +118,7 @@ class HurricaneHighWalkRoughCfg( LeggedRobotCfg ):
         soft_dof_pos_limit = 1.                                  # percentage of urdf limits, values above this limit are penalized
         soft_dof_vel_limit = 1.
         soft_torque_limit = 1.
-        base_height_target = 0.45                                 # 机身目标高度
+        base_height_target = 0.65                                # 机身目标高度
         max_contact_force = 100.                                 # 触底冲击阈值 forces above this value are penalized
         clearance_height_target = -0.20                          # 足端目标高度
 
@@ -129,7 +129,7 @@ class HurricaneHighWalkRoughCfgPPO( LeggedRobotCfgPPO ):
         num_steps_per_env = 100 # per iteration
         max_iterations = 10000 # number of policy updates
     
-        save_interval = 50 # check for potential saves every this many iterations
+        save_interval = 100 # check for potential saves every this many iterations
         run_name = ''
         experiment_name = 'rough_hurricane_high_walk'
 
