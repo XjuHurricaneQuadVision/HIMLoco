@@ -30,7 +30,7 @@
 
 from legged_gym.envs.base.legged_robot_config import LeggedRobotCfg, LeggedRobotCfgPPO
 
-class HurricaneHighWalkRoughCfg( LeggedRobotCfg ):
+class HurricaneRunRoughCfg( LeggedRobotCfg ):
     class env( LeggedRobotCfg.env ):
         num_envs = 4096
 
@@ -80,8 +80,8 @@ class HurricaneHighWalkRoughCfg( LeggedRobotCfg ):
         hip_reduction = 1.0
 
     class asset( LeggedRobotCfg.asset ):
-        file = '{LEGGED_GYM_ROOT_DIR}/resources/robots/go1/urdf/go1.urdf'
-        name = "hurricane_high_walk"
+        file = '{LEGGED_GYM_ROOT_DIR}/resources/robots/go2/urdf/go2.urdf'
+        name = "hurricane_run"
         foot_name = "foot"
         penalize_contacts_on = ["thigh", "calf", "base"]
         terminate_after_contacts_on = ["base"]
@@ -122,7 +122,7 @@ class HurricaneHighWalkRoughCfg( LeggedRobotCfg ):
         max_contact_force = 100.                                 # 触底冲击阈值 forces above this value are penalized
         clearance_height_target = -0.20                          # 足端目标高度
 
-class HurricaneHighWalkRoughCfgPPO( LeggedRobotCfgPPO ):
+class HurricaneRunRoughCfgPPO( LeggedRobotCfgPPO ):
     class algorithm( LeggedRobotCfgPPO.algorithm ):
         entropy_coef = 0.01
     class runner( LeggedRobotCfgPPO.runner ):
@@ -131,5 +131,5 @@ class HurricaneHighWalkRoughCfgPPO( LeggedRobotCfgPPO ):
     
         save_interval = 100 # check for potential saves every this many iterations
         run_name = ''
-        experiment_name = 'rough_hurricane_high_walk'
+        experiment_name = 'rough_hurricane_run'
 

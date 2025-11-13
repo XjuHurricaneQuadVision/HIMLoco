@@ -28,21 +28,6 @@
 
 
 
-
-## Learning-based Locomotion Control from OpenRobotLab
-This repository contains learning-based locomotion control research from OpenRobotLab, currently including [Hybrid Internal Model](/projects/himloco/README.md) & [H-Infinity Locomotion Control](/projects/h_infinity/README.md).
-## 🔥 News
-- [2024-04] Code of HIMLoco is released.
-- [2024-04] We release the [paper](https://arxiv.org/abs/2404.14405) of H-Infinity Locomotion Control. Please check the :point_right: [webpage](https://junfeng-long.github.io/HINF/) :point_left: and view our demos! :sparkler:
-- [2024-01] HIMLoco is accepted by ICLR 2024.
-- [2023-12] We release the [paper](https://arxiv.org/abs/2312.11460) of HIMLoco. Please check the :point_right: [webpage](https://junfeng-long.github.io/HIMLoco/) :point_left: and view our demos! :sparkler:
-
-## 📝 TODO List
-- \[x\] Release the training code of HIMLoco, please see `rsl_rl/rsl_rl/algorithms/him_ppo.py`.
-- \[ \] Release deployment guidance of HIMLoco.
-- \[ \] Release the training code of H-Infinity Locomotion Control.
-- \[ \] Release deployment guidance of H-Infinity Locomotion Control.
-
 ## 📚 Getting Started
 
 ### Installation
@@ -88,33 +73,3 @@ We test our codes under the following environment:
 2. Play and export the latest policy:
   - `cd legged_gym/legged_gym/scripts`
   - `python play.py`
-
-
-## 🔗 Citation
-
-If you find our work helpful, please cite:
-
-```bibtex
-@inproceedings{long2023him,
-  title={Hybrid Internal Model: Learning Agile Legged Locomotion with Simulated Robot Response},
-  author={Long, Junfeng and Wang, ZiRui and Li, Quanyi and Cao, Liu and Gao, Jiawei and Pang, Jiangmiao},
-  booktitle={The Twelfth International Conference on Learning Representations},
-  year={2024}
-}
-
-@misc{long2024hinf,
-  title={Learning H-Infinity Locomotion Control}, 
-  author={Junfeng Long and Wenye Yu and Quanyi Li and Zirui Wang and Dahua Lin and Jiangmiao Pang},
-  year={2024},
-  eprint={2404.14405},
-  archivePrefix={arXiv},
-}
-```
-
-## 📄 License
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a>
-<br />
-This work is under the <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
-
-## 👏 Acknowledgements
-- [legged_gym](https://github.com/leggedrobotics/legged_gym): Our codebase is built upon legged_gym.
