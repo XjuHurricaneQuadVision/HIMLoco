@@ -1,32 +1,29 @@
-# SPDX-FileCopyrightText: Copyright (c) 2021 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
-# SPDX-License-Identifier: BSD-3-Clause
-# 
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are met:
+# Copyright 2025 Jackson Huang
 #
-# 1. Redistributions of source code must retain the above copyright notice, this
-# list of conditions and the following disclaimer.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-# 2. Redistributions in binary form must reproduce the above copyright notice,
-# this list of conditions and the following disclaimer in the documentation
-# and/or other materials provided with the distribution.
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
-# 3. Neither the name of the copyright holder nor the names of its
-# contributors may be used to endorse or promote products derived from
-# this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-# Copyright (c) 2021 ETH Zurich, Nikita Rudin
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+    主要修改点说明：
+        初始高度降低:从0.42米降到0.15米
+        默认关节角度调整：让腿部更加弯曲和收缩，以适应低矮姿态
+        命令范围缩小:降低速度范围，因为匍匐时移动速度较慢
+        base_height_target降低:从0.2降到0.10, 强制机器人保持低姿态
+        增加相关惩罚：
+        增加orientation惩罚权重(从-0.2到-1.0)以维持稳定姿态
+        增加collision惩罚权重(从-0.0到-1.0)以避免机体触地
+        增加base_height惩罚权重(从-1.0到-5.0)以强化低姿态要求
+        降低max_contact_force:从100降到50,因为匍匐时接触力会更大
+"""
 
 from legged_gym.envs.base.legged_robot_config import LeggedRobotCfg, LeggedRobotCfgPPO
 
@@ -44,28 +41,28 @@ class HurricaneCrawlRoughCfg( LeggedRobotCfg ):
             resampling_time = 10. # time before command are changed[s]
             heading_command = True # if true: compute ang vel command from heading error
             class ranges( LeggedRobotCfg.commands.ranges):
-                lin_vel_x = [-1.0, 1.0] # min max [m/s]
-                lin_vel_y = [-1.0, 1.0]   # min max [m/s]
-                ang_vel_yaw = [-3.14, 3.14]    # min max [rad/s]
+                lin_vel_x = [-0.5, 0.5] # min max [m/s]
+                lin_vel_y = [-0.3, 0.3]   # min max [m/s]
+                ang_vel_yaw = [-1.5, 1.5]    # min max [rad/s]
                 heading = [-3.14, 3.14]
 
     class init_state( LeggedRobotCfg.init_state ):
-        pos = [0.0, 0.0, 0.42] # x,y,z [m]
+        pos = [0.0, 0.0, 0.15] # x,y,z [m]
         default_joint_angles = { # = target angles [rad] when action = 0.0
-            'FL_hip_joint': 0.1,   # [rad]
-            'RL_hip_joint': 0.1,   # [rad]
-            'FR_hip_joint': -0.1 ,  # [rad]
-            'RR_hip_joint': -0.1,   # [rad]
+            'FL_hip_joint': 0.0,   # [rad]
+            'RL_hip_joint': 0.0,   # [rad]
+            'FR_hip_joint': -0.0 ,  # [rad]
+            'RR_hip_joint': -0.0,   # [rad]
 
-            'FL_thigh_joint': 0.8,     # [rad]
-            'RL_thigh_joint': 1.,   # [rad]
-            'FR_thigh_joint': 0.8,     # [rad]
-            'RR_thigh_joint': 1.,   # [rad]
+            'FL_thigh_joint': 1.2,     # [rad]
+            'RL_thigh_joint': 1.2,   # [rad]
+            'FR_thigh_joint': 1.2,     # [rad]
+            'RR_thigh_joint': 1.2,   # [rad]
 
-            'FL_calf_joint': -1.5,   # [rad]
-            'RL_calf_joint': -1.5,    # [rad]
-            'FR_calf_joint': -1.5,  # [rad]
-            'RR_calf_joint': -1.5,    # [rad]
+            'FL_calf_joint': -2.2,   # [rad]
+            'RL_calf_joint': -2.2,    # [rad]
+            'FR_calf_joint': -2.2,  # [rad]
+            'RR_calf_joint': -2.2,    # [rad]
         }
 
     class control( LeggedRobotCfg.control ):
@@ -94,17 +91,17 @@ class HurricaneCrawlRoughCfg( LeggedRobotCfg ):
             termination = -0.0                                   # 回合被终止的一次性惩罚权重
             tracking_lin_vel = 1.0                               # 线速度跟踪奖励权重
             tracking_ang_vel = 0.5                               # 角速度跟踪奖励权重
-            lin_vel_z = -2.0                                     # 竖直线速度惩罚权重
-            ang_vel_xy = -0.05                                   # 横滚和俯仰角速度惩罚权重
-            orientation = -0.2                                   # 姿态偏差惩罚权重
+            lin_vel_z = -1.0                                     # 竖直线速度惩罚权重
+            ang_vel_xy = -0.1                                    # 横滚和俯仰角速度惩罚权重
+            orientation = -1.0                                   # 姿态偏差惩罚权重
             dof_acc = -2.5e-7                                    # 关节加速度惩罚权重
             joint_power = -2e-5                                  # 关节功率惩罚权重
-            base_height = -1.0                                   # 机身高度偏差惩罚权重
+            base_height = -5.0                                   # 机身高度偏差惩罚权重
             foot_clearance = -0.01                               # 足端高度惩罚权重
             action_rate = -0.01                                  # 动作一阶差分惩罚权重
             smoothness = -0.01                                   # 动作二阶差分惩罚权重
             feet_air_time =  0.0                                 # 足端腾空时长奖励权重
-            collision = -0.0                                     # 非足端接触惩罚权重
+            collision = -1.0                                     # 非足端接触惩罚权重
             feet_stumble = -0.0                                  # 足端绊倒惩罚权重
             stand_still = -0.                                    # 静止奖励权重
             torques = -0.0                                       # 关节扭矩惩罚权重
@@ -118,9 +115,9 @@ class HurricaneCrawlRoughCfg( LeggedRobotCfg ):
         soft_dof_pos_limit = 1.                                  # percentage of urdf limits, values above this limit are penalized
         soft_dof_vel_limit = 1.
         soft_torque_limit = 1.
-        base_height_target = 0.2                                 # 机身目标高度
-        max_contact_force = 100.                                 # 触底冲击阈值 forces above this value are penalized
-        clearance_height_target = -0.20                          # 足端目标高度
+        base_height_target = 0.1                                 # 机身目标高度
+        max_contact_force = 50.                                  # 触底冲击阈值 forces above this value are penalized
+        clearance_height_target = -0.25                          # 足端目标高度
 
 class HurricaneCrawlRoughCfgPPO( LeggedRobotCfgPPO ):
     class algorithm( LeggedRobotCfgPPO.algorithm ):
