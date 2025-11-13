@@ -35,7 +35,7 @@ class HurricaneLowWalkRoughCfg( LeggedRobotCfg ):
         num_envs = 4096
 
     class terrain( LeggedRobotCfg.terrain ):
-        mesh_type = 'trimesh' # "heightfield" # none, plane, heightfield or trimesh
+        mesh_type = 'plane' # "heightfield" # none, plane, heightfield or trimesh
 
     class commands( LeggedRobotCfg.commands ):
             curriculum = True
@@ -118,7 +118,7 @@ class HurricaneLowWalkRoughCfg( LeggedRobotCfg ):
         soft_dof_pos_limit = 1.                                  # percentage of urdf limits, values above this limit are penalized
         soft_dof_vel_limit = 1.
         soft_torque_limit = 1.
-        base_height_target = 0.5                                 # 机身目标高度
+        base_height_target = 0.2                                 # 机身目标高度
         max_contact_force = 100.                                 # 触底冲击阈值 forces above this value are penalized
         clearance_height_target = -0.20                          # 足端目标高度
 
