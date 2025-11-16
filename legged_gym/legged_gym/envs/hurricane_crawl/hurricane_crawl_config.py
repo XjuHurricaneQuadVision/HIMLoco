@@ -23,6 +23,7 @@
         增加collision惩罚权重(从-0.0到-1.0)以避免机体触地
         增加base_height惩罚权重(从-1.0到-5.0)以强化低姿态要求
         降低max_contact_force:从100降到50,因为匍匐时接触力会更大
+        进一步收紧腿部：调整髋关节角度使腿部更贴近身体
 """
 
 from legged_gym.envs.base.legged_robot_config import LeggedRobotCfg, LeggedRobotCfgPPO
@@ -49,10 +50,10 @@ class HurricaneCrawlRoughCfg( LeggedRobotCfg ):
     class init_state( LeggedRobotCfg.init_state ):
         pos = [0.0, 0.0, 0.15] # x,y,z [m]
         default_joint_angles = { # = target angles [rad] when action = 0.0
-            'FL_hip_joint': 0.0,   # [rad]
-            'RL_hip_joint': 0.0,   # [rad]
-            'FR_hip_joint': -0.0 ,  # [rad]
-            'RR_hip_joint': -0.0,   # [rad]
+            'FL_hip_joint': 0.2,   # [rad]
+            'RL_hip_joint': 0.2,   # [rad]
+            'FR_hip_joint': -0.2,  # [rad]
+            'RR_hip_joint': -0.2,   # [rad]
 
             'FL_thigh_joint': 1.2,     # [rad]
             'RL_thigh_joint': 1.2,   # [rad]
@@ -101,14 +102,14 @@ class HurricaneCrawlRoughCfg( LeggedRobotCfg ):
             action_rate = -0.01                                  # 动作一阶差分惩罚权重
             smoothness = -0.01                                   # 动作二阶差分惩罚权重
             feet_air_time =  0.0                                 # 足端腾空时长奖励权重
-            collision = -1.0                                     # 非足端接触惩罚权重
+            collision = -2.0                                     # 非足端接触惩罚权重
             feet_stumble = -0.0                                  # 足端绊倒惩罚权重
             stand_still = -0.                                    # 静止奖励权重
             torques = -0.0                                       # 关节扭矩惩罚权重
             dof_vel = -0.0                                       # 关节速度惩罚权重
             dof_pos_limits = -0.0                                # 接近关节位置限制惩罚权重
             dof_vel_limits = -0.0                                # 接近关节速度限制惩罚权重
-            torque_limits = -0.0                                 # 接近关节扭矩限制惩罚权重
+            torque_limits = -1.0                                 # 接近关节扭矩限制惩罚权重
 
         only_positive_rewards = False                            # if true negative total rewards are clipped at zero (avoids early termination problems)
         tracking_sigma = 0.25                                    # tracking reward = exp(-error^2/sigma)
