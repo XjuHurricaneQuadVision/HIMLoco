@@ -1,20 +1,32 @@
 # 新疆大学创新实验室仿生足式实验室RL运动控制
-## 📚 Getting Started
 
-## Preparation
+## 训练环境准备
 
-### Clone the repository
+### 克隆仓库
 ```
 git clone --recursive https://github.com/XjuHurricaneQuadVision/HIMLoco
 ```
 
+### 使用Docker构建训练环境
+进入HIMLoco根目录下，执行如下命令：
+```
+sudo chmod +x docker/build.sh
+./docker/build.sh
+```
+如果没有构建过容器，执行该脚本会自动构建容器，如果构建过，会自动进入容器。
+如果想删除本地镜像以及容器，执行如下命令：
+```
+./docker/build.sh -c
+```
+
+### 本地安装训练环境
+
+
+## 以下README正在维护..........
+
+
 ### Installation
 
-1. Create an environment and install PyTorch:
-
-  - `conda create -n himloco python=3.7.16`
-  - `conda activate himloco`
-  - `pip3 install torch==1.10.0+cu113 torchvision==0.11.1+cu113 torchaudio==0.10.0+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html`
 
 2. Install Isaac Gym:
   - Download and install Isaac Gym Preview 4 from https://developer.nvidia.com/isaac-gym
