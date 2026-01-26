@@ -6,7 +6,10 @@ import numpy as np
 import torch
 import yaml
 
-from .. import HIMLOCO_ROOT_DIR
+import os
+
+# 项目根目录
+HIMLOCO_ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
 
 def get_gravity_orientation(quaternion):
     qw = quaternion[0]

@@ -1,6 +1,6 @@
 # Go2 deploy to sim config
 policy_path: "{HIMLOCO_ROOT_DIR}/deploy/pre_train/go2/motion.pt"
-xml_path: "{HIMLOCO_ROOT_DIR}/resources/robots/go2/urdf/go2.urdf"
+xml_path: "{HIMLOCO_ROOT_DIR}/legged_gym/resources/robots/go2/scene.xml"
 
 # 模拟总时间
 simulation_duration: 60.0

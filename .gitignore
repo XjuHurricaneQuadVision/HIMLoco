@@ -58,6 +58,7 @@ runs
 # other
 *.egg-info
 __pycache__
+**/__pycache__/
 
 # ros colcon build
 build/
