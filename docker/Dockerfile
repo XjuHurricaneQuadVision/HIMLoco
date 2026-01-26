@@ -1,7 +1,7 @@
 # ==============================================================================
 # 1. 基础镜像与系统依赖
 # ==============================================================================
-FROM nvcr.io/nvidia/pytorch:21.09-py3
+FROM nvcr.io/nvidia/pytorch:22.12-py3
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -48,7 +48,8 @@ RUN pip install --no-cache-dir \
     h5py_cache \
     tensorboard \
     lcm \
-    numpy==1.23.2
+    numpy==1.23.2 \
+    protobuf==3.20.3
 
 # ==============================================================================
 # 4. 安装 Isaac Gym
