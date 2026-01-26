@@ -4,6 +4,9 @@
 FROM nvcr.io/nvidia/pytorch:22.12-py3
 ENV DEBIAN_FRONTEND=noninteractive
 
+RUN sed -i 's/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list && \
+    sed -i 's/security.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev mesa-common-dev \
     zip unzip make gcc-8 g++-8 vulkan-utils mesa-vulkan-drivers pigz git libegl1 git-lfs \
