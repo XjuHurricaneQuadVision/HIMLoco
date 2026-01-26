@@ -59,7 +59,9 @@ if __name__ == "__main__":
     with mujoco.viewer.launch_passive(m, d) as viewer:
         while viewer.is_running():
             joint_angles = mirror.get_training_order_joints()
+            quat = mirror.low_state.imu_state.quaternion  # [w, x, y, z]
             
+            d.qpos[3:7] = quat
             d.qpos[7:] = joint_angles
             
             # 更新仿真
